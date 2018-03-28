@@ -1,7 +1,7 @@
 MDPH612 TERM PROJECT
 ====================
 
-## Using a Raspberry Pi to translate breathing traces (from a Varian RPM system) into mechanical motion in a stepper motor.
+## Using a Raspberry Pi to translate breathing traces (from a Varian RPM system) into mechanical motion via a stepper motor.
 
 ### Aims:
 - Become familiar with a Raspberry Pi 3 (PIXEL for now)
