@@ -32,3 +32,5 @@ for x in range(step_count):
     sleep(delay)
     GPIO.output(STEP, GPIO.LOW)
     sleep(delay)
+
+###### This is from the first half of the tutorial - microstepping not included because I want to get everything set up in the simplest way before we play around with it. I'm going to focus on the velocity file now.
