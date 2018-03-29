@@ -33,4 +33,4 @@ for x in range(step_count):
     GPIO.output(STEP, GPIO.LOW)
     sleep(delay)
 
-###### This is from the first half of the tutorial - microstepping not included because I want to get everything set up in the simplest way before we play around with it. I'm going to focus on the velocity file now.
+###### This is from the first half of the tutorial - microstepping not included because I want to get everything set up in the simplest way before we play around with it. I'm going to focus on the velocity file now. It might actually be worth leaving this file as is and making a new one, so we can just check the motor with this one, then with a microstepping file, and then have a more complex file ready to go.
