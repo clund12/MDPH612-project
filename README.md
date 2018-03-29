@@ -14,6 +14,6 @@ MDPH612 TERM PROJECT
 
 ### Completed:
 - Conversion of general trace into instantaneous velocites
-	-- demonstrated with a simple sine wave
-	-- writes the results to a new csv
+	- demonstrated with a simple sine wave
+	- writes the results to a new csv
 - Simple stepper motor script to test whether the set-up is correct when the parts arrive
