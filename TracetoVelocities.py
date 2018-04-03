@@ -5,7 +5,7 @@ import csv
 
 #### Call this file via the command line, passing the desired csv file as an argument: >> python TracetoVelocities.py sometrace.csv
 
-# Read in the file -> gives a list of values like [x1,y1\n,x2,y2\n,etc.]
+# Read in the file -> gives a list of values like ['x1,y1\n','x2,y2\n',etc.]
 data = open(sys.argv[1],'r')
 data = data.readlines()
 
