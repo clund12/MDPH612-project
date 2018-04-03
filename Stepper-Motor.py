@@ -6,7 +6,7 @@ DIR = 20     # Direction GPIO Pin
 STEP = 21    # Step GPIO Pin
 CW = 1       # Clockwise Rotation
 CCW = 0      # Counterclockwise Rotation
-SPR = 48     # Steps per Revolution (360 / 7.5)
+SPR = 200     # Steps per Revolution (Checked according to NEMA 17 spec sheet)
 
 GPIO.setmode(GPIO.BCM)      # Broadcom memory
 GPIO.setup(DIR, GPIO.OUT)   # Sets direction pin to an output
@@ -14,7 +14,7 @@ GPIO.setup(STEP, GPIO.OUT)  # Sets step pin to an output
 GPIO.output(DIR, CW)        # Sets initial direction to clockwise
 
 step_count = SPR    # Set initial test to a single rotation
-delay = 0.0208      # (1s / 48) - rotation will take 1 second if no delay
+delay = 0.005      # (1s / 200) - rotation will take 1 second if no delay
 
 for x in range(step_count):     # Counts the 48 steps
     GPIO.output(STEP, GPIO.HIGH)# Toggles step pin high
