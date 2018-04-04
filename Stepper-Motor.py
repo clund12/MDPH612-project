@@ -13,10 +13,25 @@ GPIO.setup(DIR, GPIO.OUT)   # Sets direction pin to an output
 GPIO.setup(STEP, GPIO.OUT)  # Sets step pin to an output
 GPIO.output(DIR, CW)        # Sets initial direction to clockwise
 
+# For microstepping tests
+# Note: current is 71% of maximum in full step mode, but this is not the case
+# for microstepping! If the current has been increased past the maximum when
+# we're working with full step, then we need to decrease it.
+MODE = (14,15,18) # Microstep Resolution GPIO pins
+#GPIO.setup(MODE, GPIO.OUT)
+
+RESOLUTION = {'Full': (0,0,0),
+        'Half': (1,0,0),
+        '1/4': (0,1,0),
+        '1/8': (1,1,0),
+        '1/16': (0,0,1),
+        '1/32': (1,0,1)}
+#GPIO.output(MODE,Resolution['1/32'])
+
 step_count = SPR    # Set initial test to a single rotation
 delay = 0.005      # (1s / 200) - rotation will take 1 second if no delay
 
-for x in range(step_count):     # Counts the 48 steps
+for x in range(step_count):     # Counts the 200 steps
     GPIO.output(STEP, GPIO.HIGH)# Toggles step pin high
     sleep(delay)                # Wait duration of step
     GPIO.output(STEP, GPIO.LOW) # Toggles step pin low
