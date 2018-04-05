@@ -35,7 +35,7 @@ RESOLUTION = {'Full': (0,0,0),
         '1/32': (1,0,1)}
 RES = 'Full'
 for i in range(3):
-    pi.wire(MODE[i],RESOLUTION[RES][i])
+    pi.write(MODE[i],RESOLUTION[RES][i])
 
 # Set duty cycle and frequency
 pi.set_PWM_dutycycle(STEP,128) # PWM 1/2 On 1/2 Off - 50% duty cycle
