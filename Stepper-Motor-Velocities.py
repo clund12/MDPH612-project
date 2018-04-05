@@ -1,7 +1,7 @@
 import sys
 from time import sleep
-#import RPi.GPIO as GPIO # Can ONLY be run on a RPi!
-#import pgpio
+import RPi.GPIO as GPIO # Can ONLY be run on a RPi!
+import pgpio
 
 ## START THE PIGPIO DEAMON! - sudo pigpiod
 # Default sampling rate (defines allowable frequencies) is 5. This can be
