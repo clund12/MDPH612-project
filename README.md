@@ -17,3 +17,5 @@ MDPH612 TERM PROJECT
 	- demonstrated with a simple sine wave
 	- writes the results to a new csv
 - Simple stepper motor script to test whether the set-up is correct when the parts arrive
+- Stepper motor script with microstepping and hardware-based timing
+- Initial Archimedes screw plans
