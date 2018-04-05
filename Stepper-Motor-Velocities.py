@@ -52,11 +52,11 @@ for line in data:
     xy.append(thisxy)
 
 # Separate list of tuples into lists of just x, y
-x, y = zip(*xy)
+time, height = zip(*xy)
 
 # Convert x, y into lists of numbers
-x = list(map(float,x))
-velocities = list(map(float,y))
+time = list(map(float,time))
+velocities = list(map(float,height))
 
 # Convert velocities into rotational velocities (rpm)
 velrot = velocities          # We can get to this later
@@ -85,3 +85,32 @@ finally:
     pi.set_PWM_dutycycle(STEP,0) # PWM Off
     pi.stop()
 
+# Step through a list of [frequency, steps]
+def generate_waveform(wave):
+    pi.wave_clear()    # clear existing waves
+    length = len(wave) # number of ramp levels
+    wid = [-1]*length
+
+    # Generate a wave per ramp level
+    for i in range(length):
+        frequency = wave[i][0]
+        micros = int(500000 / frequency)
+        wf = []
+        wf.append(pigpio.pulse(1<<STEP,0,micros))
+        wf.append(pigpio.pulse(0,1<<STEP,micros))
+        pi.wave_add_generic(wf)
+        wid[i] = pi.wave_create()
+
+    # Generate a chain of waves
+    chain = []
+    for i in range(length):
+        steps = wave[i][1]
+        x = steps & 255
+        yu = steps >> 8
+        chain += [255,0,wid[i],255,1,x,y]
+
+    pi.wave_chain(chain) # Transmit chain
+
+spv = 1 # Steps per velocity point
+velwave = list(map(lambda i: [i,spv], fstep))
+# generate_waveform(velwave)
