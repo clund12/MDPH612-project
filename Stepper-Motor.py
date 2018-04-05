@@ -1,9 +1,11 @@
 import numpy as np
 from time import sleep
 import RPi.GPIO as GPIO # Can ONLY be run on a RPi!
+import pigpoid
 
 DIR = 20     # Direction GPIO Pin
 STEP = 21    # Step GPIO Pin
+SWITCH = 16  # GPIO Pin of Switch
 CW = 1       # Clockwise Rotation
 CCW = 0      # Counterclockwise Rotation
 SPR = 200     # Steps per Revolution (Checked according to NEMA 17 spec sheet)
@@ -12,21 +14,6 @@ GPIO.setmode(GPIO.BCM)      # Broadcom memory
 GPIO.setup(DIR, GPIO.OUT)   # Sets direction pin to an output
 GPIO.setup(STEP, GPIO.OUT)  # Sets step pin to an output
 GPIO.output(DIR, CW)        # Sets initial direction to clockwise
-
-# For microstepping tests
-# Note: current is 71% of maximum in full step mode, but this is not the case
-# for microstepping! If the current has been increased past the maximum when
-# we're working with full step, then we need to decrease it.
-MODE = (14,15,18) # Microstep Resolution GPIO pins
-#GPIO.setup(MODE, GPIO.OUT)
-
-RESOLUTION = {'Full': (0,0,0),
-        'Half': (1,0,0),
-        '1/4': (0,1,0),
-        '1/8': (1,1,0),
-        '1/16': (0,0,1),
-        '1/32': (1,0,1)}
-#GPIO.output(MODE,Resolution['1/32'])
 
 step_count = SPR    # Set initial test to a single rotation
 delay = 0.005      # (1s / 200) - rotation will take 1 second if no delay
