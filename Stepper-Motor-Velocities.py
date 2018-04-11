@@ -60,6 +60,7 @@ velocities = list(map(float,height))
 
 # Convert velocities into rotational velocities (rpm)
 velrot = velocities          # We can get to this later
+#Linear velocity = angular frequency (RPS)*(8 mm/rotation)
 nmicro = int(1/float(RES))   # Number of microsteps per step
 SPR = 200                    # From Nema 17 doc
 fstep = velrot*SPR*nmicro/60 # microsteps per second

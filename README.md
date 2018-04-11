@@ -19,3 +19,6 @@ MDPH612 TERM PROJECT
 - Simple stepper motor script to test whether the set-up is correct when the parts arrive
 - Stepper motor script with microstepping and hardware-based timing
 - Initial Archimedes screw plans
+
+### To be solved:
+-There is no position feedback possible with the stepper motor. How to zero the phantom position at every start-up?

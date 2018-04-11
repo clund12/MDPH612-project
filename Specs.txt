@@ -1,0 +1,4 @@
+Screw's spec:
+(https://www.pololu.com/product/2268/specs)
+Pitch = 2 mm, 4 Threads -> 8 mm per rotation
+Pin of motor: (https://i.stack.imgur.com/2vYSy.png)
