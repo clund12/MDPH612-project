@@ -21,4 +21,4 @@ MDPH612 TERM PROJECT
 - Initial Archimedes screw plans
 
 ### To be solved:
--There is no position feedback possible with the stepper motor. How to zero the phantom position at every start-up?
+-There is no position feedback possible with the stepper motor. How to zero the phantom position at every start-up? Idea: Manually spin the screw so that the washer/phantom is at the edge (motor side). 
