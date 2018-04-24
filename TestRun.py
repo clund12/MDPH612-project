@@ -40,7 +40,7 @@ frequency = velrot*400
 #thus frequency (pulse/s) = velrot (rps) * 400 (pulse/rotation)
 
 
-pi.hardware_PWM(18,frequency,dutycycle) 
+pi.hardware_PWM(18,frequency,500000) 
 #pi.set_PWM_dutycycle(STEP,dutycycle)
 #pi.set_PWM_frequency(STEP,frequency)
 pi.write(DIR,numpy.sign(velrot)) #set direction to be sign of velrot
