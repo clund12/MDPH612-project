@@ -16,6 +16,19 @@ pi = pigpio.pi()
 pi.set_mode(DIR, pigpio.OUTPUT)
 pi.set_mode(STEP, pigpio.OUTPUT)
 
+MODE = (14,15,18) # Microstep Resolution GPIO pins
+#GPIO.setup(MODE, GPIO.OUT)
+
+RESOLUTION = {'Full': (0,0,0),
+        'Half': (1,0,0),
+        '1/4': (0,1,0),
+        '1/8': (1,1,0),
+        '1/16': (0,0,1),
+        '1/32': (1,0,1)}
+RES = 'Full'
+for i in range(3):
+    pi.write(MODE[i],RESOLUTION[RES][i])
+
 velrot = 1 # define this as 1 rps
 
 dutycycle = 128 # 50% dutycycle
@@ -26,10 +39,11 @@ frequency = velrot*400
 #if one half pulse moves by 1/2 step, then 400 pulses move by 1 full rotation
 #thus frequency (pulse/s) = velrot (rps) * 400 (pulse/rotation)
 
-pi.write(DIR,numpy.sign(velrot)) #set direction to be sign of velrot
+
 #pi.hardware_PWM(18,frequency,dutycycle) 
 pi.set_PWM_dutycycle(STEP,dutycycle)
 pi.set_PWM_frequency(STEP,frequency)
+pi.write(DIR,numpy.sign(velrot)) #set direction to be sign of velrot
 sleep(1)
 pi.set_PWM_dutycycle(STEP,0)
 pi.set_PWM_frequency(STEP,frequency)
