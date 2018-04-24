@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO # Can ONLY be run on a RPi!
 import pigpio
 
 DIR = 20     # Direction GPIO Pin
-STEP = 21    # Step GPIO Pin
+STEP = 18    # Step GPIO Pin
 #SWITCH = 16  # GPIO Pin of Switch [Not Needed: we won't use a switch]
 CW = 1
 CCW = 0

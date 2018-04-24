@@ -7,7 +7,7 @@ STEP = 21    # Step GPIO Pin
 SWITCH = 16  # GPIO Pin of Switch
 CW = 1       # Clockwise Rotation
 CCW = 0      # Counterclockwise Rotation
-SPR = 800     # Steps per Revolution (Checked according to NEMA 17 spec sheet)
+SPR = 200     # Steps per Revolution (Checked according to NEMA 17 spec sheet)
 
 GPIO.setmode(GPIO.BCM)      # Broadcom memory
 GPIO.setup(DIR, GPIO.OUT)   # Sets direction pin to an output
