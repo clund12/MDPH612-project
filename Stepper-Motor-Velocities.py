@@ -75,16 +75,16 @@ pi.set_PWM_frequency(STEP,500) # 500 pulses per second - 500 Hz
 # For specific frequencies not in table PiStepperFreq.png, use pin 18 and:
 #pi.hardware_PWM(18,frequency,dutycycle)
 
-try:
-    while True:
-        pi.write(DIR,pi.read(SWITCH)) # Set direction
-        sleep(.1)
+#try:
+#    while True:
+#        pi.write(DIR,pi.read(SWITCH)) # Set direction
+#        sleep(.1)
 
-except KeyboardInterrupt:
-    print("Stopping PIGPIO and exiting...")
-finally:
-    pi.set_PWM_dutycycle(STEP,0) # PWM Off
-    pi.stop()
+#except KeyboardInterrupt:
+#    print("Stopping PIGPIO and exiting...")
+#finally:
+#    pi.set_PWM_dutycycle(STEP,0) # PWM Off
+#    pi.stop()
 
 # Step through a list of [frequency, steps]
 def generate_waveform(wave):
@@ -114,4 +114,4 @@ def generate_waveform(wave):
 
 spv = 1 # Steps per velocity point
 velwave = list(map(lambda i: [i,spv], fstep))
-# generate_waveform(velwave)
+generate_waveform(velwave)
