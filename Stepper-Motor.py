@@ -1,7 +1,6 @@
 import numpy as np
 from time import sleep
 import RPi.GPIO as GPIO # Can ONLY be run on a RPi!
-import pigpoid
 
 DIR = 20     # Direction GPIO Pin
 STEP = 21    # Step GPIO Pin
