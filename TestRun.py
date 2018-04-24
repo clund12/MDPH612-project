@@ -34,7 +34,7 @@ velrot = 1 # define this as 1 rps
 dutycycle = 250000 # 50% dutycycle
 
 #frequency = number of pulses per s
-frequency = velrot*400
+frequency = velrot*200
 #if one full pulse moves by 1 step, then 200 pulses move by 1 full rotation
 #if one half pulse moves by 1/2 step, then 400 pulses move by 1 full rotation
 #thus frequency (pulse/s) = velrot (rps) * 400 (pulse/rotation)
