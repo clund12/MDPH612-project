@@ -31,7 +31,7 @@ for i in range(3):
 
 velrot = 1 # define this as 1 rps
 
-dutycycle = 128 # 50% dutycycle
+dutycycle = 500000 # 50% dutycycle
 
 #frequency = number of pulses per s
 frequency = velrot*400
@@ -40,7 +40,7 @@ frequency = velrot*400
 #thus frequency (pulse/s) = velrot (rps) * 400 (pulse/rotation)
 
 
-pi.hardware_PWM(18,frequency,500000) 
+pi.hardware_PWM(18,frequency,dutycycle) 
 #pi.set_PWM_dutycycle(STEP,dutycycle)
 #pi.set_PWM_frequency(STEP,frequency)
 pi.write(DIR,numpy.sign(velrot)) #set direction to be sign of velrot
