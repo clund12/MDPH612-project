@@ -31,7 +31,11 @@ for i in range(3):
 
 velrot = 1 # define this as 1 rps
 
+<<<<<<< HEAD
 dutycycle = 128000 # 50% dutycycle
+=======
+dutycycle = 500000 # 50% dutycycle
+>>>>>>> 9135c7ccf08b5df7553d4526a2010dcd5fc414c8
 
 #frequency = number of pulses per s
 frequency = velrot*400
