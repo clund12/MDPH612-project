@@ -79,7 +79,7 @@ dutycycle = 128
 
 # For specific frequencies not in table PiStepperFreq.png, use pin 18 and:
 for i in range(len(time)):
-    pi.write(DIR,numpy.sign(velrot))
+    pi.write(DIR,numpy.sign(velrot[i]))
     pi.hardware_PWM(18,velrot[i],dutycycle)
     sleep(time[i+1]-time[i])
 
