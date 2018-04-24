@@ -15,7 +15,7 @@ GPIO.setup(STEP, GPIO.OUT)  # Sets step pin to an output
 GPIO.output(DIR, CW)        # Sets initial direction to clockwise
 
 step_count = SPR    # Set initial test to a single rotation
-delay = 4/SPR      # (1s / 200) - rotation will take 1 second if no delay
+delay = 4/step_count      # (1s / 200) - rotation will take 1 second if no delay
 
 for x in range(step_count):     # Counts the 200 steps
     GPIO.output(STEP, GPIO.HIGH)# Toggles step pin high
