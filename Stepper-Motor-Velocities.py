@@ -73,7 +73,7 @@ pi.set_PWM_dutycycle(STEP,128) # PWM 1/2 On 1/2 Off - 50% duty cycle
 pi.set_PWM_frequency(STEP,500) # 500 pulses per second - 500 Hz
 
 # For specific frequencies not in table PiStepperFreq.png, use pin 18 and:
-pi.hardware_PWM(18,frequency,dutycycle)
+#pi.hardware_PWM(18,frequency,dutycycle)
 
 try:
     while True:
