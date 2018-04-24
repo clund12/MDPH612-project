@@ -34,7 +34,7 @@ RESOLUTION = {'1': (0,0,0),
         '1/8': (1,1,0),
         '1/16': (0,0,1),
         '1/32': (1,0,1)}
-RES = 'Full'
+RES = '1'
 for i in range(3):
     pi.write(MODE[i],RESOLUTION[RES][i])
 
