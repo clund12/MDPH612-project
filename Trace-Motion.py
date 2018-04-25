@@ -54,7 +54,7 @@ pi = pigpio.pi()
 DIR = 20     # Direction GPIO Pin
 STEP = 18    # Step GPIO Pin
 
-dutycycle = 500000 # 50% dutycycle (bipolar motor)
+dutycycle = 250000 # 50% dutycycle (bipolar motor)
 
 try:
     i = 0
