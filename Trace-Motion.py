@@ -54,7 +54,7 @@ try:
     i = 0
     while i<len(velocities):
         # Set rotational direction to match instantaneous angular frequency
-        pi.write(DIR,numpy.sign(omega[i]))
+        pi.write(DIR,np.sign(omega[i]))
         # Set frequency to the instantaneous angular frequency
         pi.hardware_PWM(18, omega[i], dutycycle)
         # Wait for current movement to finish before continuing
