@@ -52,7 +52,7 @@ dutycycle = 500000 # 50% dutycycle (bipolar motor)
 
 try:
     i = 0
-    while i<len(velocities):
+    while (i<len(velocities)):
         # Set rotational direction to match instantaneous angular frequency
         pi.write(DIR,np.sign(omega[i]))
         # Set frequency to the instantaneous angular frequency
