@@ -40,7 +40,7 @@ for i, val in enumerate(z):
         velocities.append(vel)
 
 # angular freq (steps/s) = 200 (steps/rev) * linear velocity (cm/s) / (0.8 cm/rev)
-omega = list(map(lambda i: 400*i/0.8,velocities))
+omega = list(map(lambda i: 200*i/0.8, velocities))
 
 # Can only input positive frequencies, so take absolute value of every omega
 magomega = list(map(abs,omega))
@@ -64,7 +64,7 @@ try:
         # Set frequency to the instantaneous angular frequency
         pi.hardware_PWM(18, magomega[i], dutycycle)
         # Wait for current movement to finish before continuing
-        sleep(h)
+        sleep(2*h)
         i += 1
 
 # In case something goes wrong..
