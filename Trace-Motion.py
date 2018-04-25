@@ -45,6 +45,9 @@ omega = list(map(lambda i: 200*i/0.8,velocities))
 # Can only input positive frequencies, so take absolute value of every omega
 magomega = list(map(abs,omega))
 
+# Also need the directions: clockwise (1) if positive, counterclockwise (0) if negative
+directions = list(map(lambda i: 1 if i>0 else 0, omega))
+
 # Connect to pigpio daemon
 pi = pigpio.pi()
 
@@ -57,7 +60,7 @@ try:
     i = 0
     while (i<len(velocities)):
         # Set rotational direction to match instantaneous angular frequency
-        pi.write(DIR,np.sign(omega[i]))
+        pi.write(DIR,directions[i])
         # Set frequency to the instantaneous angular frequency
         pi.hardware_PWM(18, magomega[i], dutycycle)
         # Wait for current movement to finish before continuing
