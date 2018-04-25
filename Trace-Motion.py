@@ -39,8 +39,11 @@ for i, val in enumerate(z):
         vel = (z[i+1] - z[i-1])/(2*h)
         velocities.append(vel)
 
- # angular freq (steps/s) = 200 (steps/rev) * linear velocity (cm/s) / (0.8 cm/rev)
+# angular freq (steps/s) = 200 (steps/rev) * linear velocity (cm/s) / (0.8 cm/rev)
 omega = list(map(lambda i: 200*i/0.8,velocities))
+
+# Can only input positive frequencies, so take absolute value of every omega
+magomega = list(map(abs,omega))
 
 # Connect to pigpio daemon
 pi = pigpio.pi()
@@ -56,7 +59,7 @@ try:
         # Set rotational direction to match instantaneous angular frequency
         pi.write(DIR,np.sign(omega[i]))
         # Set frequency to the instantaneous angular frequency
-        pi.hardware_PWM(18, omega[i], dutycycle)
+        pi.hardware_PWM(18, magomega[i], dutycycle)
         # Wait for current movement to finish before continuing
         sleep(h)
         i += 1
