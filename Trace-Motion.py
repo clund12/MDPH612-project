@@ -1,4 +1,4 @@
-iimport sys
+import sys
 import numpy as np
 import csv
 import itertools
@@ -29,7 +29,7 @@ if sys.argv[1].lower().endswith('.csv'):
 
 elif sys.argv[1].lower().endswith('txt'):
 
-    # If .txt, split values with a tab and lines with a line break
+    # If .txt, use tabs to split values and lines
     d = '\t'
 
     # Remove blank lines
@@ -91,18 +91,23 @@ z = list(map(lambda i: float(i.replace(',', '.')), z))
 ################################################################################
 ### Calculate velocities from trace position data
 
+
 # Define step size for finite differences
 h = (t[-1] - t[0])/len(t)
 
 # Create list of velocities (simplest method)
 velocities = []
+
 for i, val in enumerate(z):
+
     if i == 0:
         vel = (z[i+1] - z[i])/h
         velocities.append(vel)
+
     elif i == len(z)-1:
         vel = (z[i] - z[i-1])/h
         velocities.append(vel)
+
     else:
         vel = (z[i+1] - z[i-1])/(2*h)
         velocities.append(vel)
@@ -126,13 +131,18 @@ dutycycle = 500000 # 50% dutycycle (bipolar motor)
 
 try:
     i = 0
+
     while (i<len(velocities)):
+
         # Set rotational direction to match instantaneous angular frequency
         pi.write(DIR,directions[i])
+
         # Set frequency to the instantaneous angular frequency
         pi.hardware_PWM(18, magomega[i], dutycycle)
+
         # Wait for current movement to finish before continuing
         sleep(2*h)
+
         i += 1
 
 # In case something goes wrong..
