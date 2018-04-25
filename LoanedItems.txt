@@ -1,2 +1,8 @@
 - 2x Allen key (small and smaller one)
     - both in the RPi box for now
+- 2 Alligator clips
+- 4 Leads
+- Multimeter
+- Power supply
+- Capacitor
+- Potentiometer Screwdriver

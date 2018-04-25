@@ -78,48 +78,7 @@ dutycycle = 128
 # For specific frequencies not in table PiStepperFreq.png, use pin 18 and:
 for i in range(len(time)):
     pi.write(DIR,numpy.sign(velrot[i]))
-    pi.hardware_PWM(18,velrot[i],dutycycle)
+    pi.hardware_PWM(18,velrot[i]*200,dutycycle)
     sleep(time[i+1]-time[i])
 
 pi.hardware_PWM(18,frequency,0) 
-#try:
-#    while True:
-#        pi.write(DIR,pi.read(SWITCH)) # Set direction, Change SWITCH to sign of
-        #vel
-#        sleep(.1)
-#except KeyboardInterrupt:
-#    print("Stopping PIGPIO and exiting...")
-#finally:
-#    pi.set_PWM_dutycycle(STEP,0) # PWM Off
-#    pi.stop()
-
-#Might not need ramp at all
-# Step through a list of [frequency, steps]
-#def generate_waveform(wave):
-#    pi.wave_clear()    # clear existing waves
-#    length = len(wave) # number of ramp levels
-#    wid = [-1]*length
-#
-#    # Generate a wave per ramp level
-#    for i in range(length):
-#        frequency = wave[i][0]
-#        micros = int(500000 / frequency)
-#        wf = []
-#        wf.append(pigpio.pulse(1<<STEP,0,micros))
-#        wf.append(pigpio.pulse(0,1<<STEP,micros))
-#        pi.wave_add_generic(wf)
-#        wid[i] = pi.wave_create()
-#
-#    # Generate a chain of waves
-#    chain = []
-#    for i in range(length):
-#        steps = wave[i][1]
-#        x = steps & 255
-#        yu = steps >> 8
-#        chain += [255,0,wid[i],255,1,x,y]
-#
-#    pi.wave_chain(chain) # Transmit chain
-#
-#spv = 1 # Steps per velocity point
-#velwave = list(map(lambda i: [i,spv], fstep))
-# generate_waveform(velwave)
