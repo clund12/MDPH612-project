@@ -40,7 +40,7 @@ for i, val in enumerate(z):
         velocities.append(vel)
 
 # angular freq (steps/s) = 200 (steps/rev) * linear velocity (cm/s) / (0.8 cm/rev)
-omega = list(map(lambda i: 200*i/0.8,velocities))
+omega = list(map(lambda i: 400*i/0.8,velocities))
 
 # Can only input positive frequencies, so take absolute value of every omega
 magomega = list(map(abs,omega))
@@ -54,7 +54,7 @@ pi = pigpio.pi()
 DIR = 20     # Direction GPIO Pin
 STEP = 18    # Step GPIO Pin
 
-dutycycle = 250000 # 50% dutycycle (bipolar motor)
+dutycycle = 500000 # 50% dutycycle (bipolar motor)
 
 try:
     i = 0
