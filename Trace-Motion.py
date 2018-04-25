@@ -1,27 +1,95 @@
-import sys
+iimport sys
 import numpy as np
-from time import sleep
+import csv
+import itertools
 import pigpio
-# Make sure to run "sudo pigpiod" in the command line
+from time import sleep
 
-# Read in the file -> gives a list of values like ['t1,z1\n','t2,z2\n',etc.]
-# Where t = time (s), z = cranial-caudal displacement (cm)
-data = open(sys.argv[1],'r')
-data = data.readlines()
+#### This file must be run with a data file 
+#### e.g. >> python FiletypeInputTest.py example.txt
 
-# Create new list of (t1,z1),(t2,z2), etc. tuples
-tz = []
-for line in data:
-    line = line.strip('\n')
-    thistz = line.split(',')
-    tz.append(thistz)
+# Start pigpio daemon
+import subprocess
+subprocess.Popen("sudo pigpiod")
+
+################################################################################
+# Read in data file, ensures it is a 2 column csv or txt file with equal lengths
+# Import the data if it matches the criteria, raise an error otherwise
+
+# First, read in data file entered during function call
+f = open(sys.argv[1],'r')
+
+
+# Check file extension in a case-insensitive manner
+if sys.argv[1].lower().endswith('.csv'):
+        
+    # If .csv, use commas to split values and lines
+    d = ','
+
+
+elif sys.argv[1].lower().endswith('txt'):
+
+    # If .txt, split values with a tab and lines with a line break
+    d = '\t'
+
+    # Remove blank lines
+    lines = f.readlines()
+
+    with open(sys.argv[1],'w') as f:
+        lines = filter(str.strip, lines)
+        f.writelines(lines)
+
+
+else: 
+    raise ValueError("This is not a .csv or .txt file")
+
+with open(sys.argv[1],'r') as f:
+
+    # Use csv reader tool to make sure the number of columns is 2
+    # Itertools.tee splits the single iterable output by csv reader into
+    # multiple iterables
+    rows, columns = itertools.tee(csv.reader(f, delimiter=d,
+        skipinitialspace=True))
+
+
+    # Read first line and count columns 
+    if len(next(rows)) == 2:
+
+        # Make sure the columns are the same length
+        if len(next(columns)) == len(next(columns)):
+                
+            # Go back to beginning of file
+            f.seek(0)
+
+            # The file gives a list of values like ['t1,z1\n','t2,z2\n',etc.]
+            # Where t = time (s), z = cranial-caudal displacement (cm)
+            # Create new list of (t1,z1),(t2,z2), etc. tuples
+            tz = []
+            for line in f:
+                thistz = line.split(d)
+                tz.append(thistz)
+
+
+        else:
+            raise ValueError("Please ensure the columns are the same length")
+
+        # Make sure that itertools does not hold rows in memory
+        del rows
+
+
+    else:
+        raise ValueError("This file is not 2 columns")
+
 
 # Separate list of tuples into lists of just t, z
 t, z = zip(*tz)
 
-# Convert x, y into lists of numbers
-t = list(map(float,t))
-z = list(map(float,z))
+# Convert t, z into lists of numbers
+t = list(map(lambda i: float(i.replace(',', '.')), t))
+z = list(map(lambda i: float(i.replace(',', '.')), z))
+
+################################################################################
+### Calculate velocities from trace position data
 
 # Define step size for finite differences
 h = (t[-1] - t[0])/len(t)
