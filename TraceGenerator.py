@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import csv
 
 # Define a sine wave
-x = np.linspace(0, 12*sc.pi, 100)
+x = np.linspace(0, 12*sc.pi, 1200)
 xy = list(map(lambda i: [10*i/(2*sc.pi), 4*np.sin(i)], x))
 
 ##### Place any other function you want to test here:
