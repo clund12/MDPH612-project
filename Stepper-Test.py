@@ -8,6 +8,37 @@ from time import sleep
 #### This file must be run with a data file 
 #### e.g. >> python FiletypeInputTest.py example.txt
 
+##############################################################################
+#### Set up GPIO pins and microstep resolution
+
+# Directions need to be converted from +/- to 1/0 for clockwise/counter-clockwise
+def rot_direct(x):
+
+    if np.sign(x) == 1:
+        return 1
+    else:
+        return 0
+
+DIR = 20          # Direction GPIO Pin
+STEP = 21         # Step GPIO Pin
+MODE = (14,15,18) # Microstep Resolution GPIO pins
+
+GPIO.setmode(GPIO.BCM)      # Broadcom memory
+GPIO.setup(DIR, GPIO.OUT)   # Sets direction pin to an output
+GPIO.setup(STEP, GPIO.OUT)  # Sets step pin to an output
+GPIO.setup(MODE, GPIO.OUT)
+
+
+RESOLUTION = {'1': (0,0,0),
+        '0.5': (1,0,0),
+        '0.25': (0,1,0),
+        '0.125': (1,1,0),
+        '0.0625': (0,0,1),
+        '0.03125': (1,0,1)}
+RES = '0.25'
+
+GPIO.output(MODE,RESOLUTION[RES])
+
 ################################################################################
 # Read in data file, ensures it is a 2 column csv or txt file with equal lengths
 # Import the data if it matches the criteria, raise an error otherwise
@@ -84,56 +115,90 @@ t, z = zip(*tz)
 t = list(map(lambda i: float(i.replace(',', '.')), t))
 z = list(map(lambda i: float(i.replace(',', '.')), z))
 
+
 ################################################################################
 ### Calculate velocities from trace position data
 
 # Create list of velocities (simplest method)
 displacements = []
+delta_t = []
 
-for i, val in enumerate(z):
+for i, val in enumerate(z[0:-1]):
 
     dis = z[i+1] - z[i]
+    del_t = t[i+1] - t[i]
     displacements.append(dis)
+    delta_t.append(del_t)
+
+spr = 200              # steps per revolution = 200 - from NEMA 17 spec sheet
+micro = 1/float(RES)     # Number of microsteps per full step
+step_count = micro*spr # Total number of microstep per revolutions
 
 
-# rotation (steps) = 200 (steps/rev) * linear displ. (cm) / (0.8 cm/rev)
-omega = list(map(lambda i: 200*i/0.8, displacements))
+# Rotation angle (steps) = step count (microsteps/rev) * linear displ. (cm) / (0.8 cm/rev)
+theta = list(map(lambda i: float(step_count*i/0.8), displacements))
 
 # Can only input positive frequencies, so take absolute value of every omega
-magomega = list(map(abs,omega))
+mag_theta = list(map(lambda i: abs(int(round(i))),theta))
 
 # Also need the directions: clockwise (1) if positive, counterclockwise (0) if negative
-directions = list(map(lambda i: 1 if i>0 else 0, omega))
+directions = list(map(rot_direct, theta))
 
-# Connect to pigpio daemon
-pi = pigpio.pi()
+# Finally, need positive or negative direction info to keep track of position
+sign = list(map(np.sign, theta))
 
-DIR = 20     # Direction GPIO Pin
-STEP = 18    # Step GPIO Pin
+# Define maximum position to be 8 cm in either direction, so platform is not overextended
+max_pos = step_count*8/0.8
 
-dutycycle = 500000 # 50% dutycycle (bipolar motor)
+# Define delay between pulses so that movement can finish
+delay = np.divide(delta_t,mag_theta)
+
+# Divide delay by 2 because delays are set twice per step
+delay = np.divide(delay,2)
+
 
 try:
     i = 0
+    pos = 0
 
-    while (i<len(velocities)):
+    while (i<len(displacements) and abs(pos)<max_pos):
 
-        # Set rotational direction to match instantaneous angular frequency
-        pi.write(DIR,directions[i])
+        # Set rotational direction to match step direction
+        GPIO.output(DIR,directions[i])
 
-        # Set frequency to the instantaneous angular frequency
-        pi.hardware_PWM(18, magomega[i], dutycycle)
+        # Step through the calculated rotation angle
+        for s in range(mag_theta[i]):
+            GPIO.output(STEP, GPIO.HIGH)
+            sleep(delay[i])
+            GPIO.output(STEP, GPIO.LOW)
+            sleep(delay[i])
 
-        # Wait for current movement to finish before continuing
-        sleep(2*h)
+            # Update position of platform
+            pos += sign[i]
 
         i += 1
-
+    print pos
 # In case something goes wrong..
 except KeyboardInterrupt:
     print("Stopping PIGPIO and exiting...")
 
 # When the trace has finished, shut down the motor
 finally:
-    pi.hardware_PWM(STEP,0,0) # PWM Off
-    pi.stop()
+    sleep(5)
+
+    # Make sure pin is set to low first
+    GPIO.output(STEP, GPIO.LOW)
+
+    # Set direction to account for current position
+    GPIO.output(DIR, rot_direct(-pos))
+
+    # Return platform to centre
+    for x in range(int(abs(pos))):
+
+        GPIO.output(STEP, GPIO.HIGH)
+        sleep(0.00125)
+        GPIO.output(STEP, GPIO.LOW)
+        sleep(0.00125)
+    
+    # Shut down GPIO module
+    GPIO.cleanup()

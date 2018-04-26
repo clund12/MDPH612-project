@@ -5,7 +5,7 @@ import csv
 
 # Define a sine wave
 x = np.linspace(0, 2*sc.pi, 100)
-xy = list(map(lambda i: [i, np.sin(i)], x))
+xy = list(map(lambda i: [i, 4*np.sin(i)], x))
 
 ##### Place any other function you want to test here:
 

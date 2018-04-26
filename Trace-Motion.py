@@ -1,3 +1,4 @@
+import subprocess
 import sys
 import numpy as np
 import csv
@@ -7,10 +8,6 @@ from time import sleep
 
 #### This file must be run with a data file 
 #### e.g. >> python FiletypeInputTest.py example.txt
-
-# Start pigpio daemon
-import subprocess
-subprocess.Popen("sudo pigpiod", shell=True)
 
 ################################################################################
 # Read in data file, ensures it is a 2 column csv or txt file with equal lengths
@@ -113,7 +110,7 @@ for i, val in enumerate(z):
         velocities.append(vel)
 
 # angular freq (steps/s) = 200 (steps/rev) * linear velocity (cm/s) / (0.8 cm/rev)
-omega = list(map(lambda i: 200*i/0.8, velocities))
+omega = list(map(lambda i: float(200*i/0.8), velocities))
 
 # Can only input positive frequencies, so take absolute value of every omega
 magomega = list(map(abs,omega))
@@ -141,7 +138,7 @@ try:
         pi.hardware_PWM(18, magomega[i], dutycycle)
 
         # Wait for current movement to finish before continuing
-        sleep(2*h)
+        sleep(h)
 
         i += 1
 
