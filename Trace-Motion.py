@@ -10,7 +10,7 @@ from time import sleep
 
 # Start pigpio daemon
 import subprocess
-subprocess.Popen("sudo pigpiod")
+subprocess.Popen("sudo pigpiod", shell=True)
 
 ################################################################################
 # Read in data file, ensures it is a 2 column csv or txt file with equal lengths
