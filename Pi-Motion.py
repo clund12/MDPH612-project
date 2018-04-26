@@ -20,7 +20,7 @@ def rot_direct(x):
         return 0
 
 DIR = 20          # Direction GPIO Pin
-STEP = 21         # Step GPIO Pin
+STEP = 21         # Step GPIO Pin:q
 MODE = (14,15,18) # Microstep Resolution GPIO pins
 
 GPIO.setmode(GPIO.BCM)      # Broadcom memory
@@ -35,7 +35,7 @@ RESOLUTION = {'1': (0,0,0),
         '0.125': (1,1,0),
         '0.0625': (0,0,1),
         '0.03125': (1,0,1)}
-RES = '0.25'
+RES = '0.5'
 
 GPIO.output(MODE,RESOLUTION[RES])
 
@@ -151,7 +151,13 @@ sign = list(map(np.sign, theta))
 max_pos = step_count*8/0.8
 
 # Define delay between pulses so that movement can finish
-delay = np.divide(delta_t,mag_theta)
+delay = []
+
+for i, val in enumerate(mag_theta):
+    if val == 0:
+        delay.append(delta_t[i])
+    else:
+        delay.append(delta_t[i]/val)
 
 # Divide delay by 2 because delays are set twice per step
 delay = np.divide(delay,2)
@@ -167,17 +173,21 @@ try:
         GPIO.output(DIR,directions[i])
 
         # Step through the calculated rotation angle
-        for s in range(mag_theta[i]):
-            GPIO.output(STEP, GPIO.HIGH)
-            sleep(delay[i])
-            GPIO.output(STEP, GPIO.LOW)
-            sleep(delay[i])
+        if mag_theta[i] == 0:
+            sleep(2*delay[i])
 
-            # Update position of platform
-            pos += sign[i]
+        else:
+            for s in range(mag_theta[i]):
+                GPIO.output(STEP, GPIO.HIGH)
+                sleep(delay[i])
+                GPIO.output(STEP, GPIO.LOW)
+                sleep(delay[i])
+
+                # Update position of platform
+                pos += sign[i]
 
         i += 1
-    print pos
+
 # In case something goes wrong..
 except KeyboardInterrupt:
     print("Stopping PIGPIO and exiting...")
