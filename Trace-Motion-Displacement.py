@@ -3,22 +3,21 @@ import numpy as np
 import csv
 import itertools
 import RPi.GPIO as GPIO
-from time import sleep
-from time import time
+from time import time,sleep
+
 #### This file must be run with a data file 
 #### e.g. >> python FiletypeInputTest.py example.txt
 
 ##############################################################################
 #### Set up GPIO pins and microstep resolution
 
-# Directions need to be converted from +/- to 1/0 for clockwise/counter-clockwise
+# Convert direction from +/- to 1/0 for clockwise/counter-clockwise
 def rot_direct(x):
 
     if np.sign(x) == 1:
         return 1
     else:
         return 0
-
 
 
 DIR = 20          # Direction GPIO Pin
@@ -160,11 +159,14 @@ delay = np.divide(delay,2)
 
 
 try:
+    # Temporal accuracy is imperfect, track it with timelost variable 
     timelost = []
     i = 0
+
     # pos is the current position of the nut with respect to the center in
     # number of microsteps
     pos = 0
+
     # Loop through the trace and ensure total displacement from the center is 
     # smaller than max_pos 
     while (i<len(displacements) and abs(pos)<max_pos):
