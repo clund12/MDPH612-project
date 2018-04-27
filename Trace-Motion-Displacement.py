@@ -160,7 +160,10 @@ delay = np.divide(delay,2)
 
 
 try:
-    timelost = []
+    
+#   timelost = []
+    timestart = time()
+    
     i = 0
     # pos is the current position of the nut with respect to the center in
     # number of microsteps
@@ -168,7 +171,9 @@ try:
     # Loop through the trace and ensure total displacement from the center is 
     # smaller than max_pos 
     while (i<len(displacements) and abs(pos)<max_pos):
-        timestart = time()
+        
+#        timestart = time()
+        
         # Set rotational direction to match step direction
         GPIO.output(DIR,directions[i])
 
@@ -185,10 +190,17 @@ try:
 
             # Update position of platform
             pos += sign[i]
-        timelost[i] = time()-timestart-delta_t[i]
+        
+ #       timelost[i] = time()-timestart-delta_t[i]
+        timelost = time()-timestart-sum(delta_t[0:i+1])
+        if timelost>0 and i+1<len(displacements):
+            if delay[i+1]>timelost/(4*mag_theta[i+1]):
+                delay[i+1] = delay[i+1] - timelost/(4*mag_theta[i+1])    
+                
         i += 1
-    print delta_t, timelost, displacements
-    print sum(timelost)    
+#    print delta_t, timelost, displacements
+#    print sum(timelost)    
+
 # In case something goes wrong..
 except KeyboardInterrupt:
     print("Stopping PIGPIO and exiting...")
