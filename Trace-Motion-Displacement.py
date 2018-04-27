@@ -152,10 +152,17 @@ sign = list(map(np.sign, theta))
 max_pos = step_count*8/0.8
 
 # Define delay between pulses so that movement can finish
-delay = np.divide(delta_t,mag_theta)
+delay = []
 
-# Divide delay by 2 because delays are set twice per microstep
+for i, val in enumerate(mag_theta):
+    if val == 0:
+        delay.append(delta_t[i])
+    else:
+        delay.append(delta_t[i]/val)
+
+# Divide delay by 2 because delays are set twice per step
 delay = np.divide(delay,2)
+
 
 
 try:
@@ -179,14 +186,19 @@ try:
         # sleep() between GPIO.HIGH and GPIO.LOW sets the time taken by the 
         # motor to rotate by 1 microstep. sleep() after GPIO.low sets the delay
         # between each microstep
-        for s in range(mag_theta[i]):
-            GPIO.output(STEP, GPIO.HIGH) 
-            sleep(delay[i])
-            GPIO.output(STEP, GPIO.LOW)
-            sleep(delay[i])
+        if mag_theta[i] == 0:
+            sleep(2*delay[i])
 
-            # Update position of platform
-            pos += sign[i]
+        else:
+            for s in range(mag_theta[i]):
+                GPIO.output(STEP, GPIO.HIGH)
+                sleep(delay[i])
+                GPIO.output(STEP, GPIO.LOW)
+                sleep(delay[i])
+
+                # Update position of platform
+                pos += sign[i]
+
         timelost[i] = time()-timestart-delta_t[i]
         i += 1
     print delta_t, timelost, displacements
