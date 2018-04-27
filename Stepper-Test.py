@@ -19,6 +19,8 @@ def rot_direct(x):
     else:
         return 0
 
+
+
 DIR = 20          # Direction GPIO Pin
 STEP = 21         # Step GPIO Pin
 MODE = (14,15,18) # Microstep Resolution GPIO pins
@@ -117,9 +119,9 @@ z = list(map(lambda i: float(i.replace(',', '.')), z))
 
 
 ################################################################################
-### Calculate velocities from trace position data
+### Calculate displacements from trace position data
 
-# Create list of velocities (simplest method)
+# Create list of displacements and time intervals (simplest method)
 displacements = []
 delta_t = []
 
@@ -135,7 +137,7 @@ micro = 1/float(RES)     # Number of microsteps per full step
 step_count = micro*spr # Total number of microstep per revolutions
 
 
-# Rotation angle (steps) = step count (microsteps/rev) * linear displ. (cm) / (0.8 cm/rev)
+# Rotation angle (microsteps) = step count (microsteps/rev) * linear displ. (cm) / (0.8 cm/rev)
 theta = list(map(lambda i: float(step_count*i/0.8), displacements))
 
 # Can only input positive frequencies, so take absolute value of every omega
@@ -153,22 +155,29 @@ max_pos = step_count*8/0.8
 # Define delay between pulses so that movement can finish
 delay = np.divide(delta_t,mag_theta)
 
-# Divide delay by 2 because delays are set twice per step
+# Divide delay by 2 because delays are set twice per microstep
 delay = np.divide(delay,2)
 
 
 try:
     i = 0
+    # pos is the current position of the nut with respect to the center in
+    # number of microsteps
     pos = 0
-
+    # Loop through the trace and ensure total displacement from the center is 
+    # smaller than max_pos 
     while (i<len(displacements) and abs(pos)<max_pos):
 
         # Set rotational direction to match step direction
         GPIO.output(DIR,directions[i])
 
         # Step through the calculated rotation angle
+        # Motor rotates by 1 microstep per iteration of the 'for' loop
+        # sleep() between GPIO.HIGH and GPIO.LOW sets the time taken by the 
+        # motor to rotate by 1 microstep. sleep() after GPIO.low sets the delay
+        # between each microstep
         for s in range(mag_theta[i]):
-            GPIO.output(STEP, GPIO.HIGH)
+            GPIO.output(STEP, GPIO.HIGH) 
             sleep(delay[i])
             GPIO.output(STEP, GPIO.LOW)
             sleep(delay[i])
@@ -177,7 +186,7 @@ try:
             pos += sign[i]
 
         i += 1
-    print pos
+        
 # In case something goes wrong..
 except KeyboardInterrupt:
     print("Stopping PIGPIO and exiting...")
