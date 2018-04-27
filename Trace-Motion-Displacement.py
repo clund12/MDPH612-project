@@ -4,7 +4,7 @@ import csv
 import itertools
 import RPi.GPIO as GPIO
 from time import sleep
-
+from time import time
 #### This file must be run with a data file 
 #### e.g. >> python FiletypeInputTest.py example.txt
 
@@ -160,6 +160,7 @@ delay = np.divide(delay,2)
 
 
 try:
+    timelost = []
     i = 0
     # pos is the current position of the nut with respect to the center in
     # number of microsteps
@@ -167,7 +168,7 @@ try:
     # Loop through the trace and ensure total displacement from the center is 
     # smaller than max_pos 
     while (i<len(displacements) and abs(pos)<max_pos):
-
+        timestart = time()
         # Set rotational direction to match step direction
         GPIO.output(DIR,directions[i])
 
@@ -184,9 +185,10 @@ try:
 
             # Update position of platform
             pos += sign[i]
-
+        timelost[i] = time()-timestart-delta_t[i]
         i += 1
-        
+    print delta_t, timelost, displacements
+    print sum(timelost)    
 # In case something goes wrong..
 except KeyboardInterrupt:
     print("Stopping PIGPIO and exiting...")
