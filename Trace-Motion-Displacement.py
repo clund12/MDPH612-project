@@ -131,9 +131,9 @@ for i, val in enumerate(z[0:-1]):
     displacements.append(dis)
     delta_t.append(del_t)
 
-spr = 200              # steps per revolution = 200 - from NEMA 17 spec sheet
-micro = 1/float(RES)     # Number of microsteps per full step
-step_count = micro*spr # Total number of microstep per revolutions
+spr = 200                 # steps per revolution = 200 - from NEMA 17 spec sheet
+micro = 1/float(RES)      # Number of microsteps per full step
+step_count = micro*spr    # Total number of microstep per revolutions
 
 
 # Rotation angle (microsteps) = step count (microsteps/rev) * linear displ. (cm) / (0.8 cm/rev)
@@ -151,9 +151,11 @@ sign = list(map(np.sign, theta))
 # Define maximum position to be 8 cm in either direction, so platform is not overextended
 max_pos = step_count*8/0.8
 
-# Define delay between pulses so that movement can finish
+# Define delay to be (half, see below) the time taken to rotate a microstep
 delay = []
 
+# If next time interval requires 0 step, delay is simply set to be equal to the
+# full time interval  
 for i, val in enumerate(mag_theta):
     if val == 0:
         delay.append(delta_t[i])
@@ -163,21 +165,27 @@ for i, val in enumerate(mag_theta):
 # Divide delay by 2 because delays are set twice per step
 delay = np.divide(delay,2)
 
+# Minimum allowable delay defined by max frequency (4 kHz / 2)
+min_delay = float(1/8000)
 
 
 try:
     # Temporal accuracy is imperfect, track it with timelost variable 
-    timelost = []
+    timestart = time()
+
     i = 0
 
     # pos is the current position of the nut with respect to the center in
     # number of microsteps
     pos = 0
+    
+    # t_cum is the cumulative delay
+    t_cum = 0
 
     # Loop through the trace and ensure total displacement from the center is 
     # smaller than max_pos 
     while (i<len(displacements) and abs(pos)<max_pos):
-        timestart = time()
+
         # Set rotational direction to match step direction
         GPIO.output(DIR,directions[i])
 
@@ -195,21 +203,47 @@ try:
                 sleep(delay[i])
                 GPIO.output(STEP, GPIO.LOW)
                 sleep(delay[i])
-
+                
                 # Update position of platform
                 pos += sign[i]
+    
 
-        timelost[i] = time()-timestart-delta_t[i]
+        # Update cumulative time
+        t_cum += delta_t[i]
+
+        timelost = time() - timestart - t_cum
+
+
+        if i+1<len(displacements):
+
+            # Need the following for built-in servo
+            # If next interval requires no step, set update_delay to be 2
+            update_delay = 2 if mag_theta[i+1] == 0 else 2*mag_theta[i+1]
+
+            # If the timelost is non-zero, need to account for it to maintain
+            # overall temporal accuracy - built in servo
+            # If next delay cannot account for full timelost, spread correction
+            # over subsequent steps and set next delay to minimum
+
+            if delta_t[i+1]>timelost+update_delay*min_delay:
+                # Subtract next delay by the total time lost converted to
+                # microstep delays  
+                delay[i+1] -= float(timelost/update_delay)
+
+            else:
+                delay[i+1] = min_delay
+
         i += 1
-    print delta_t, timelost, displacements
-    print sum(timelost)    
+
 # In case something goes wrong..
 except KeyboardInterrupt:
     print("Stopping PIGPIO and exiting...")
 
 # When the trace has finished, shut down the motor
 finally:
-    sleep(5)
+    sleep(3)
+
+    print "percent error in time =",100*timelost/t_cum,"%"
 
     # Make sure pin is set to low first
     GPIO.output(STEP, GPIO.LOW)

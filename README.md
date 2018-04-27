@@ -57,7 +57,7 @@ The goal of this work is to design an open-source, easy-to-construct 4D breast p
 ### Authors
 
 - Chris Lund
-- Veng-Jean Heng
+- Veng Jean Heng
 
 ### Acknowledgements
 
