@@ -4,6 +4,7 @@ import csv
 import itertools
 import RPi.GPIO as GPIO
 from time import time,sleep
+import matplotlib.pyplot as plt
 
 #### This file must be run with a data file 
 #### e.g. >> python FiletypeInputTest.py example.txt
@@ -139,6 +140,9 @@ step_count = micro*spr    # Total number of microstep per revolutions
 # Rotation angle (microsteps) = step count (microsteps/rev) * linear displ. (cm) / (0.8 cm/rev)
 theta = list(map(lambda i: step_count*i/0.8, displacements))
 
+# Keep track of programmed position
+step_position = list(sum(theta[0:x+1]) for x in range(len(theta)))
+
 # Can only input positive frequencies, so take absolute value of every omega
 mag_theta = list(map(lambda i: abs(int(round(i))),theta))
 
@@ -166,14 +170,16 @@ for i, val in enumerate(mag_theta):
 # Divide delay by 2 because delays are set twice per step
 delay = np.divide(delay,2)
 
-# Minimum allowable delay defined by max frequency 
-# (1 / 1 kHz * 2 * # of micro steps per full step)
-min_delay = 1/(2*38000*micro)
+timesincestart=[]
+current_position=[]
 
 
 try:
     # Temporal accuracy is imperfect, track it with timelost variable 
     timestart = time()
+
+    # Keep track of total time elapsed
+    t_cum_list = []
 
     i = 0
 
@@ -212,28 +218,11 @@ try:
 
         # Update cumulative time
         t_cum += delta_t[i]
+        t_cum_list.append(t_cum)
 
         timelost = time() - timestart - t_cum
-
-
-        if i+1<len(displacements):
-
-            # Need the following for built-in servo
-            # If next interval requires no step, set update_delay to be 2
-            update_delay = 2 if mag_theta[i+1] == 0 else 2*mag_theta[i+1]
-
-            # If the timelost is non-zero, need to account for it to maintain
-            # overall temporal accuracy - built in servo
-            # If next delay cannot account for full timelost, spread correction
-            # over subsequent steps and set next delay to minimum
-
-            if delta_t[i+1]>timelost+update_delay*min_delay:
-                # Subtract next delay by the total time lost converted to
-                # microstep delays  
-                delay[i+1] -= timelost/update_delay
-
-            else:
-                delay[i+1] = min_delay
+        timesincestart.append(timelost + t_cum)
+        current_position.append(pos)
 
         i += 1
 
@@ -263,3 +252,13 @@ finally:
     
     # Shut down GPIO module
     GPIO.cleanup()
+
+    step_position = list(map(lambda i: i*float(RES)*0.8/200, step_position))
+    current_position = list(map(lambda i: i*float(RES)*0.8/200, current_position))
+
+    plt.plot(t_cum_list,step_position,'b',label='programmed position vs. programmed time')
+    plt.plot(timesincestart,current_position,'k',label='actual position vs. actual time')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Position (cm)')
+    plt.legend(loc='upper right')
+    plt.show()
