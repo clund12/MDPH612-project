@@ -46,17 +46,71 @@
 
     \frametitle{Motivation}
 
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item Motion in imaging and treatment can pose an issue..
+                    \begin{itemize}
+                        \item Breath hold/gated treatments
+                        \item CyberKnife motion-tracking
+                        \item Motion artifacts in IGRT
+                    \end{itemize}
+                \vspace{1em}
+                \item Currently, only available QA phantom is by QUASAR
+                    \begin{itemize}
+                        \item Very expensive
+                        \item Not full 4D capabilities
+                    \end{itemize}
+                    \vspace{1em}
+                \item Desire for open-source alternative
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \vspace*{-1.5em}
+            \begin{figure}[h]
+                \centering
+                \includegraphics[width=0.9\columnwidth]{cyberknife.jpeg}
+            \end{figure}
+            \vspace*{-2em}
+            \begin{figure}[h]
+                \centering
+                \includegraphics[width=0.9\columnwidth]{QASAR.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
+
 \end{frame}
 
 \begin{frame}
 
     \frametitle{Overview of Project}
 
+    \begin{itemize}
+        \item Want to
+            \begin{itemize}
+                \item Take in a breathing trace
+                \item Convert it into mechanical motion
+            \end{itemize}
+            \vspace{1em}
+        \item Needs to be
+            \begin{itemize}
+                \item Standalone
+                \item ``Perfect'' temporal and spatial accuracy
+                \item Open-source and cheap
+            \end{itemize}
+            \vspace{1em}
+        \item How to?
+            \begin{itemize}
+                \item Raspberry Pi $\rightarrow$ Stepper motor
+                \item Rotational motion $\rightarrow$ Linear motion
+            \end{itemize}
+    \end{itemize}
+
 \end{frame}
 
 \begin{frame}
 
-    \frametitle{Motivation}
+    \frametitle{}
 
 \end{frame}
 
