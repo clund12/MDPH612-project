@@ -1,7 +1,7 @@
 MDPH612 TERM PROJECT
 ====================
 
-# Towards a 4D breast phantom for CyberKnife QA
+# Towards a 4D breast phantom for Radiotherapy QA
 ## Translation of breathing trace data into mechanical motion
 
 ### Project Outline
@@ -63,3 +63,4 @@ The goal of this work is to design an open-source, easy-to-construct 4D breast p
 
 - Dr. Francois DeBlois
 - McGill MPU
+- rdagger68 (circuitry tutorial)
