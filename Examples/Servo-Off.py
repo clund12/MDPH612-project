@@ -140,20 +140,17 @@ step_count = micro*spr    # Total number of microstep per revolutions
 # Rotation angle (microsteps) = step count (microsteps/rev) * linear displ. (cm) / (0.8 cm/rev)
 theta = list(map(lambda i: step_count*i/0.8, displacements))
 
-# Keep track of programmed position
-step_position = list(sum(theta[0:x+1]) for x in range(len(theta)))
+# Also need the directions: clockwise (1) if positive, counterclockwise (0) if negative
+directions = list(map(rot_direct, theta))
 
 # Can only input positive frequencies, so take absolute value of every omega
 mag_theta = list(map(lambda i: abs(int(round(i))),theta))
 
-# Also need the directions: clockwise (1) if positive, counterclockwise (0) if negative
-directions = list(map(rot_direct, theta))
+# Define max position to be 8 cm in either direction, so platform isn't overextended
+max_pos = step_count*8/0.8
 
 # Finally, need positive or negative direction info to keep track of position
 sign = list(map(np.sign, theta))
-
-# Define maximum position to be 8 cm in either direction, so platform is not overextended
-max_pos = step_count*8/0.8
 
 # Define delay to be (half, see below) the time taken to rotate a microstep
 delay = []
@@ -169,6 +166,12 @@ for i, val in enumerate(mag_theta):
 
 # Divide delay by 2 because delays are set twice per step
 delay = np.divide(delay,2)
+
+################################################################################
+#### For plotting
+
+# Keep track of programmed position
+step_position = list(sum(theta[0:x+1]) for x in range(len(theta)))
 
 timesincestart=[]
 current_position=[]

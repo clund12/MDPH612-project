@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.26)  29 APR 2018 16:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.26)  29 APR 2018 18:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1446,11 +1446,18 @@ Package pdftex.def Info: connections.png used on input line 120.
 File: steppermotorimage-0.png Graphic file (type png)
 
 <use steppermotorimage-0.png>
-Package pdftex.def Info: steppermotorimage-0.png used on input line 151.
-(pdftex.def)             Requested size: 171.14764pt x 171.15291pt.
+Package pdftex.def Info: steppermotorimage-0.png used on input line 155.
+(pdftex.def)             Requested size: 85.57382pt x 85.5734pt.
+
+<steppermotorimage-1.png, id=144, 401.5pt x 401.5pt>
+File: steppermotorimage-1.png Graphic file (type png)
+
+<use steppermotorimage-1.png>
+Package pdftex.def Info: steppermotorimage-1.png used on input line 155.
+(pdftex.def)             Requested size: 85.57382pt x 85.5734pt.
  [5
 
- <./steppermotorimage-0.png>]
+ <./steppermotorimage-0.png> <./steppermotorimage-1.png>]
 Package atenddvi Info: Last page = 6.
  [6
 
@@ -1464,12 +1471,11 @@ Package atenddvi Info: Last page = 6.
 \tf@snm=\write8
 \openout8 = `Lund_Heng_MDPH612_Pres.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 163.
-Package atveryend Info: Executing hook `AfterLastShipout' on input line 163.
-
-(./Lund_Heng_MDPH612_Pres.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 163.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 163.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 167.
+Package atveryend Info: Executing hook `AfterLastShipout' on input line 167.
+ (./Lund_Heng_MDPH612_Pres.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 167.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 167.
 Package rerunfilecheck Info: File `Lund_Heng_MDPH612_Pres.out' has not changed.
 
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
@@ -1478,13 +1484,13 @@ Package rerunfilecheck Info: File `Lund_Heng_MDPH612_Pres.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 163.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 167.
  ) 
 Here is how much of TeX's memory you used:
- 28344 strings out of 493029
- 540605 string characters out of 6136234
+ 28349 strings out of 493029
+ 540739 string characters out of 6136234
  621349 words of memory out of 5000000
- 31295 multiletter control sequences out of 15000+600000
+ 31299 multiletter control sequences out of 15000+600000
  21481 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  68i,17n,98p,10393b,906s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1493,10 +1499,10 @@ r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on Lund_Heng_MDPH612_Pres.pdf (6 pages, 800191 bytes).
+Output written on Lund_Heng_MDPH612_Pres.pdf (6 pages, 806185 bytes).
 PDF statistics:
- 219 PDF objects out of 1000 (max. 8388607)
+ 221 PDF objects out of 1000 (max. 8388607)
  184 compressed objects within 2 object streams
  13 named destinations out of 1000 (max. 500000)
- 98 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 103 words of extra memory for PDF output out of 10000 (max. 10000000)
 
