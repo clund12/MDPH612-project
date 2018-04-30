@@ -252,7 +252,7 @@ try:
 
 # In case something goes wrong..
 except KeyboardInterrupt:
-    print("Stopping PIGPIO and exiting...")
+    print("Stopping GPIO and exiting...")
 
 # When the trace has finished, shut down the motor
 finally:
