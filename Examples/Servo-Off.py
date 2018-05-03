@@ -78,7 +78,7 @@ with open(sys.argv[1],'r') as f:
     # Use csv reader tool to make sure the number of columns is 2
     # Itertools.tee splits the single iterable output by csv reader into
     # multiple iterables
-    rows, columns = itertools.tee(csv.reader(f, delimiter=d,
+    rows = itertools.tee(csv.reader(f, delimiter=d,
         skipinitialspace=True))
 
 
